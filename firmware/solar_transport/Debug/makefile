@@ -13,6 +13,22 @@ RM := rm -rf
 -include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/WindowFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/TransformFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/SupportFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/StatisticsFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/SVMFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/QuaternionMathFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/MatrixFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/InterpolationFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/FilteringFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/FastMathFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/DistanceFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/ControllerFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/ComplexMathFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/CommonTables/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/BayesFunctions/subdir.mk
+-include Middlewares/Third_Party/ARM_CMSIS/Source/BasicMathFunctions/subdir.mk
 -include Drivers/STM32G4xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
@@ -65,8 +81,8 @@ all:
 main-build: solar_transport.elf secondary-outputs
 
 # Tool invocations
-solar_transport.elf solar_transport.map: $(OBJS) $(USER_OBJS) /home/natthaphxt/Documents/GitHub/transporter_ws/firmware/solar_transport/STM32G474RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "solar_transport.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/natthaphxt/Documents/GitHub/transporter_ws/firmware/solar_transport/STM32G474RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="solar_transport.map" -Wl,--gc-sections -static -L..//micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+solar_transport.elf solar_transport.map: $(OBJS) $(USER_OBJS) /home/beamkeerati/Solar/transporter_ws/firmware/solar_transport/STM32G474RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "solar_transport.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/beamkeerati/Solar/transporter_ws/firmware/solar_transport/STM32G474RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="solar_transport.map" -Wl,--gc-sections -static -L..//micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros -L../Middlewares/ST/ARM/DSP/Lib --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -86,7 +102,7 @@ clean:
 	-@echo ' '
 
 pre-build:
-	docker pull microros/micro_ros_static_library_builder:humble && docker run --rm -v /home/natthaphxt/Documents/GitHub/transporter_ws/firmware/solar_transport:/project --env MICROROS_LIBRARY_FOLDER=micro_ros_stm32cubemx_utils/microros_static_library_ide microros/micro_ros_static_library_builder:humble
+	echo " " | sudo -S docker pull microros/micro_ros_static_library_builder:humble && echo " " | sudo -S docker run --rm -v /home/beamkeerati/Solar/transporter_ws/firmware/solar_transport:/project --env MICROROS_LIBRARY_FOLDER=micro_ros_stm32cubemx_utils/microros_static_library_ide microros/micro_ros_static_library_builder:humble
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
