@@ -81,8 +81,8 @@ all:
 main-build: solar_transport.elf secondary-outputs
 
 # Tool invocations
-solar_transport.elf solar_transport.map: $(OBJS) $(USER_OBJS) /home/beamkeerati/Solar/transporter_ws/firmware/solar_transport/STM32G474RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "solar_transport.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/beamkeerati/Solar/transporter_ws/firmware/solar_transport/STM32G474RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="solar_transport.map" -Wl,--gc-sections -static -L..//micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros -L../Middlewares/ST/ARM/DSP/Lib --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+solar_transport.elf solar_transport.map: $(OBJS) $(USER_OBJS) /home/natthaphxt/Documents/GitHub/transporter_ws/firmware/solar_transport/STM32G474RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "solar_transport.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/natthaphxt/Documents/GitHub/transporter_ws/firmware/solar_transport/STM32G474RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="solar_transport.map" -Wl,--gc-sections -static -L..//micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros -L../Middlewares/ST/ARM/DSP/Lib --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -102,7 +102,7 @@ clean:
 	-@echo ' '
 
 pre-build:
-	echo " " | sudo -S docker pull microros/micro_ros_static_library_builder:humble && echo " " | sudo -S docker run --rm -v /home/beamkeerati/Solar/transporter_ws/firmware/solar_transport:/project --env MICROROS_LIBRARY_FOLDER=micro_ros_stm32cubemx_utils/microros_static_library_ide microros/micro_ros_static_library_builder:humble
+	echo " " | sudo -S docker pull microros/micro_ros_static_library_builder:humble && echo " " | sudo -S docker run --rm -v /home/natthaphxt/Documents/GitHub/transporter_ws/firmware/solar_transport:/project --env MICROROS_LIBRARY_FOLDER=micro_ros_stm32cubemx_utils/microros_static_library_ide microros/micro_ros_static_library_builder:humble
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
