@@ -9298,28 +9298,28 @@ void transporter_begin() {
  800479c:	483d      	ldr	r0, [pc, #244]	@ (8004894 <transporter_begin+0x1dc>)
  800479e:	f7fc fd63 	bl	8001268 <MDXX_set_range>
 
-	PID_CONTROLLER_Init(&pid1, 500000, 7500, 0, 65535);
+	PID_CONTROLLER_Init(&pid1, 10000, 500, 0, 65535);
  80047a2:	eddf 1a3f 	vldr	s3, [pc, #252]	@ 80048a0 <transporter_begin+0x1e8>
  80047a6:	ed9f 1a3c 	vldr	s2, [pc, #240]	@ 8004898 <transporter_begin+0x1e0>
  80047aa:	eddf 0a3e 	vldr	s1, [pc, #248]	@ 80048a4 <transporter_begin+0x1ec>
  80047ae:	ed9f 0a3e 	vldr	s0, [pc, #248]	@ 80048a8 <transporter_begin+0x1f0>
  80047b2:	483e      	ldr	r0, [pc, #248]	@ (80048ac <transporter_begin+0x1f4>)
  80047b4:	f7fc fc77 	bl	80010a6 <PID_CONTROLLER_Init>
-	PID_CONTROLLER_Init(&pid2, 500000, 7500, 0, 65535);
+	PID_CONTROLLER_Init(&pid2, 10000, 500, 0, 65535);
  80047b8:	eddf 1a39 	vldr	s3, [pc, #228]	@ 80048a0 <transporter_begin+0x1e8>
  80047bc:	ed9f 1a36 	vldr	s2, [pc, #216]	@ 8004898 <transporter_begin+0x1e0>
  80047c0:	eddf 0a38 	vldr	s1, [pc, #224]	@ 80048a4 <transporter_begin+0x1ec>
  80047c4:	ed9f 0a38 	vldr	s0, [pc, #224]	@ 80048a8 <transporter_begin+0x1f0>
  80047c8:	4839      	ldr	r0, [pc, #228]	@ (80048b0 <transporter_begin+0x1f8>)
  80047ca:	f7fc fc6c 	bl	80010a6 <PID_CONTROLLER_Init>
-	PID_CONTROLLER_Init(&pid3, 500000, 7500, 0, 65535);
+	PID_CONTROLLER_Init(&pid3, 10000, 500, 0, 65535);
  80047ce:	eddf 1a34 	vldr	s3, [pc, #208]	@ 80048a0 <transporter_begin+0x1e8>
  80047d2:	ed9f 1a31 	vldr	s2, [pc, #196]	@ 8004898 <transporter_begin+0x1e0>
  80047d6:	eddf 0a33 	vldr	s1, [pc, #204]	@ 80048a4 <transporter_begin+0x1ec>
  80047da:	ed9f 0a33 	vldr	s0, [pc, #204]	@ 80048a8 <transporter_begin+0x1f0>
  80047de:	4835      	ldr	r0, [pc, #212]	@ (80048b4 <transporter_begin+0x1fc>)
  80047e0:	f7fc fc61 	bl	80010a6 <PID_CONTROLLER_Init>
-	PID_CONTROLLER_Init(&pid4, 500000, 7500, 0, 65535);
+	PID_CONTROLLER_Init(&pid4, 10000, 500, 0, 65535);
  80047e4:	eddf 1a2e 	vldr	s3, [pc, #184]	@ 80048a0 <transporter_begin+0x1e8>
  80047e8:	ed9f 1a2b 	vldr	s2, [pc, #172]	@ 8004898 <transporter_begin+0x1e0>
  80047ec:	eddf 0a2d 	vldr	s1, [pc, #180]	@ 80048a4 <transporter_begin+0x1ec>
@@ -9366,7 +9366,7 @@ void transporter_begin() {
  8004850:	40733333 	.word	0x40733333
  8004854:	3dfae148 	.word	0x3dfae148
  8004858:	2000505c 	.word	0x2000505c
- 800485c:	3ea8f5c3 	.word	0x3ea8f5c3
+ 800485c:	3faa3d71 	.word	0x3faa3d71
  8004860:	20004ba0 	.word	0x20004ba0
  8004864:	20004e4c 	.word	0x20004e4c
  8004868:	20004bec 	.word	0x20004bec
@@ -9384,8 +9384,8 @@ void transporter_begin() {
  8004898:	00000000 	.word	0x00000000
  800489c:	44fa0000 	.word	0x44fa0000
  80048a0:	477fff00 	.word	0x477fff00
- 80048a4:	45ea6000 	.word	0x45ea6000
- 80048a8:	48f42400 	.word	0x48f42400
+ 80048a4:	43fa0000 	.word	0x43fa0000
+ 80048a8:	461c4000 	.word	0x461c4000
  80048ac:	20004f7c 	.word	0x20004f7c
  80048b0:	20004fa8 	.word	0x20004fa8
  80048b4:	20004fd4 	.word	0x20004fd4
