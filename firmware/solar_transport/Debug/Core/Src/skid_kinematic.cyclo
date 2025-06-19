@@ -1,0 +1,5 @@
+../Core/Src/skid_kinematic.c:11:6:SKID_init	1
+../Core/Src/skid_kinematic.c:28:6:SKID_inverse_kinematic	5
+../Core/Src/skid_kinematic.c:53:6:SKID_forward_kinematic	5
+../Core/Src/skid_kinematic.c:78:6:SKID_calculate_pose	6
+../Core/Src/skid_kinematic.c:129:6:SKID_reset_pose	1
