@@ -83,7 +83,7 @@ extern QEI encoder4;
 #define ENC_TIM4 &htim20
 #define ENC_PPR 8192.0
 #define ENC_FREQ 1000
-#define MOTOR_RATIO 1.33f
+#define MOTOR_RATIO 0.33f
 /*-----Configure Encoder End-----*/
 
 extern FIR lowPassFilter1;
