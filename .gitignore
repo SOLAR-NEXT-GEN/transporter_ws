@@ -3,3 +3,6 @@
 /firmware/solar_transport/Debug
 /firmware/solar_transport/Release
 
+/build
+/install
+/log
