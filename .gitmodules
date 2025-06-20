@@ -13,3 +13,6 @@
 [submodule "src/transporter_rtk"]
 	path = src/transporter_rtk
 	url = https://github.com/SOLAR-NEXT-GEN/transporter_rtk.git
+[submodule "src/sparkfun_rtk_express"]
+	path = src/sparkfun_rtk_express
+	url = https://github.com/pboon09/sparkfun_rtk_express.git
