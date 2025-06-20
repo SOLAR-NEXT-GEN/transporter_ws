@@ -1,0 +1,15 @@
+[submodule "src/transporter_interface"]
+	path = src/transporter_interface
+	url = https://github.com/SOLAR-NEXT-GEN/transporter_interface.git
+[submodule "src/transporter_realsense"]
+	path = src/transporter_realsense
+	url = https://github.com/SOLAR-NEXT-GEN/transporter_realsense.git
+[submodule "src/transporter_description"]
+	path = src/transporter_description
+	url = https://github.com/SOLAR-NEXT-GEN/transporter_description.git
+[submodule "src/transporter_bringup"]
+	path = src/transporter_bringup
+	url = https://github.com/SOLAR-NEXT-GEN/transporter_bringup.git
+[submodule "src/transporter_rtk"]
+	path = src/transporter_rtk
+	url = https://github.com/SOLAR-NEXT-GEN/transporter_rtk.git
