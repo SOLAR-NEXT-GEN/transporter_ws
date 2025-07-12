@@ -19,3 +19,7 @@
 [submodule "src/transporter_joy"]
 	path = src/transporter_joy
 	url = https://github.com/SOLAR-NEXT-GEN/transporter_joy.git
+[submodule "firmware/Adafruit-9-DOF-Absolute-Orientation-IMU-Fusion-Breakout---BNO055"]
+	path = firmware/Adafruit-9-DOF-Absolute-Orientation-IMU-Fusion-Breakout---BNO055
+	url = https://github.com/SOLAR-NEXT-GEN/Adafruit-9-DOF-Absolute-Orientation-IMU-Fusion-Breakout---BNO055.git
+	branch = G4_NO_UROS
