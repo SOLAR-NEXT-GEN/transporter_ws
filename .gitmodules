@@ -30,3 +30,9 @@
 [submodule "src/transporter_imu"]
 	path = src/transporter_imu
 	url = https://github.com/SOLAR-NEXT-GEN/transporter_imu.git
+[submodule "src/transporter_controller"]
+	path = src/transporter_controller
+	url = https://github.com/SOLAR-NEXT-GEN/transporter_controller.git
+[submodule "src/transporter_simulation"]
+	path = src/transporter_simulation
+	url = https://github.com/SOLAR-NEXT-GEN/transporter_simulation.git
