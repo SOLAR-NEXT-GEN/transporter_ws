@@ -23,3 +23,10 @@
 	path = firmware/Adafruit-9-DOF-Absolute-Orientation-IMU-Fusion-Breakout---BNO055
 	url = https://github.com/SOLAR-NEXT-GEN/Adafruit-9-DOF-Absolute-Orientation-IMU-Fusion-Breakout---BNO055.git
 	branch = G4_NO_UROS
+[submodule "firmware/imu_uros"]
+	path = firmware/imu_uros
+	url = https://github.com/SOLAR-NEXT-GEN/Adafruit-9-DOF-Absolute-Orientation-IMU-Fusion-Breakout---BNO055.git
+	branch = G4_UROS_UART
+[submodule "src/transporter_imu"]
+	path = src/transporter_imu
+	url = https://github.com/SOLAR-NEXT-GEN/transporter_imu.git
