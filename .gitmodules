@@ -40,3 +40,6 @@
 	path = src/robot_localization
 	url = https://github.com/cra-ros-pkg/robot_localization.git
 	branch = humble-devel
+[submodule "src/transporter_localization"]
+	path = src/transporter_localization
+	url = https://github.com/SOLAR-NEXT-GEN/transporter_localization.git
