@@ -43,3 +43,6 @@
 [submodule "src/transporter_localization"]
 	path = src/transporter_localization
 	url = https://github.com/SOLAR-NEXT-GEN/transporter_localization.git
+[submodule "src/ros2_twist_mux"]
+	path = src/ros2_twist_mux
+	url = https://github.com/pboon09/ros2_twist_mux.git
