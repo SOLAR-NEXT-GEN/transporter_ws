@@ -1,26 +1,27 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
 #include "adc.h"
 #include "dma.h"
+#include "iwdg.h"
 #include "usart.h"
 #include "tim.h"
 #include "gpio.h"
@@ -43,6 +44,8 @@
 #include <std_msgs/msg/float64_multi_array.h>
 #include <std_msgs/msg/float32_multi_array.h>
 #include <geometry_msgs/msg/twist.h>
+
+#include "config.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -79,9 +82,14 @@ std_msgs__msg__Float64MultiArray pub_msg;
 rcl_subscription_t subscriber;
 std_msgs__msg__Float64MultiArray sub_msg;
 
-uint8_t cmd_FL_hinge, cmd_BL_hinge;
+int cmd_FL_hinge, cmd_BL_hinge;
 uint8_t FL_photo1, FL_photo2, BL_photo1, BL_photo2;
 uint8_t FL_limit1, FL_limit2, BL_limit1, BL_limit2;
+int FL_hinge_state, BL_hinge_state;
+
+int32_t cmd_vel1, cmd_vel2;
+int FlexData[4] = { 0 };
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -109,47 +117,84 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time) {
 		// Sync micro-ROS session
 		rmw_uros_sync_session(timeout_ms);
 
+		// photo 0 = found
 		FL_photo1 = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5);
 		FL_photo2 = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4);
 		BL_photo1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
 		BL_photo2 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9);
 
+		// limit 1 = trick
 		FL_limit1 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5);
 		FL_limit2 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);
 		BL_limit1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
 		BL_limit2 = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
 
-		if (FL_photo1 == 1 && FL_photo2 == 1) {
+//		Flex1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+//		Flex2 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1);
 
+//		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, cmd_vel1);
+//		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, cmd_vel2);
+//		MDXX_set_range(&FL_motor, 2000, cmd_vel1);
+//		MDXX_set_range(&BL_motor, 2000, cmd_vel2);
+
+		if (cmd_FL_hinge == 1) {
+			if (FL_photo1 == 1 && FL_photo2 == 1 && FL_limit1 == 0
+					&& FL_limit2 == 0) {
+				MDXX_set_range(&FL_motor, 2000, -65535); // down
+				FL_hinge_state = 1;
+			} else if (FL_limit1 == 1 || FL_limit2 == 1) {
+				MDXX_set_range(&FL_motor, 2000, 0); // stop
+				FL_hinge_state = 0;
+			}
+		} else if (cmd_FL_hinge == 0) {
+			MDXX_set_range(&FL_motor, 2000, 0); // stop
+			FL_hinge_state = 0;
+		} else if (cmd_FL_hinge == -1) {
+			MDXX_set_range(&FL_motor, 2000, 65535); // up
+			FL_hinge_state = -1;
 		}
 
-		if (BL_photo1 == 1 && BL_photo2 == 1) {
-
+		if (cmd_BL_hinge == 1) {
+			if (BL_photo1 == 1 && BL_photo2 == 1 && BL_limit1 == 0
+					&& BL_limit2 == 0) {
+				MDXX_set_range(&BL_motor, 2000, -65535); // down
+				BL_hinge_state = 1;
+			} else if (BL_limit1 == 1 && BL_limit2 == 1) {
+				MDXX_set_range(&BL_motor, 2000, 0); // stop
+				BL_hinge_state = 0;
+			}
+		} else if (cmd_BL_hinge == 0) {
+			MDXX_set_range(&BL_motor, 2000, 0); // stop
+			BL_hinge_state = 0;
+		} else if (cmd_BL_hinge == -1) {
+			MDXX_set_range(&BL_motor, 2000, 65535); // up
+			BL_hinge_state = -1;
 		}
 
 		// Prepare and publish multi-array message with motor data
 		if (pub_msg.data.data != NULL) {
-//			pub_msg.data.data[0] = L_encoder;
-//			pub_msg.data.data[1] = R_encoder;
-//			pub_msg.data.data[2] = loadcell;
-//			pub_msg.data.data[3] = U_proximity;
-//			pub_msg.data.data[4] = D_proximity;
+			pub_msg.data.data[0] = FL_hinge_state;
+			pub_msg.data.data[1] = BL_hinge_state;
 
 			// Publish the multi-array message
 			RCLSOFTCHECK(rcl_publish(&publisher, &pub_msg, NULL));
 		}
 
 		// Reinitialize watchdog timer
-//		HAL_IWDG_Init(&hiwdg);
+		HAL_IWDG_Init(&hiwdg);
 	}
 }
 
-void subscription_callback(const void * msgin)
-{
-	const std_msgs__msg__Float64MultiArray * msg = (const std_msgs__msg__Float64MultiArray*)msgin;
-	// 1 = down, 0 = stop, -1 = up
-	cmd_FL_hinge = msg->data.data[0];
-	cmd_BL_hinge = msg->data.data[1];
+void subscription_callback(const void *msgin) {
+	const std_msgs__msg__Float64MultiArray *msg =
+			(const std_msgs__msg__Float64MultiArray*) msgin;
+
+	// Extract commands: 1 = down, 0 = stop, -1 = up
+	cmd_vel1 =99;
+	if (msg->data.size >= 2) {
+		cmd_FL_hinge = (int)msg->data.data[0];
+		cmd_BL_hinge = (int)msg->data.data[1];
+	}
 }
 
 void StartDefaultTask(void *argument) {
@@ -175,7 +220,7 @@ void StartDefaultTask(void *argument) {
 	//create init_options
 	init_options = rcl_get_zero_initialized_init_options();
 	RCLSOFTCHECK(rcl_init_options_init(&init_options, allocator));
-	RCLSOFTCHECK(rcl_init_options_set_domain_id(&init_options, 99));
+	RCLSOFTCHECK(rcl_init_options_set_domain_id(&init_options, 124));
 
 	rclc_support_init_with_options(&support, 0, NULL, &init_options,
 			&allocator);
@@ -195,9 +240,29 @@ void StartDefaultTask(void *argument) {
 
 	pub_msg.layout.data_offset = 0;
 
-	pub_msg.data.capacity = 5;
-	pub_msg.data.size = 5;
-	pub_msg.data.data = malloc(5 * sizeof(double));
+	pub_msg.data.capacity = 2;
+	pub_msg.data.size = 2;
+	pub_msg.data.data = malloc(2 * sizeof(double));
+
+	// Allocate layout for sub_msg
+	sub_msg.layout.dim.capacity = 1;
+	sub_msg.layout.dim.size = 1;
+	sub_msg.layout.dim.data = malloc(sizeof(std_msgs__msg__MultiArrayDimension));
+
+	sub_msg.layout.dim.data[0].label.data = malloc(10);
+	sub_msg.layout.dim.data[0].label.capacity = 10;
+	sub_msg.layout.dim.data[0].label.size = strlen("cmd_data");
+	strcpy(sub_msg.layout.dim.data[0].label.data, "cmd_data");
+
+	sub_msg.layout.data_offset = 0;
+
+	// Allocate data array for sub_msg
+	sub_msg.data.capacity = 2;
+	sub_msg.data.size = 2;
+	sub_msg.data.data = malloc(sizeof(double) * 2);
+	sub_msg.data.data[0] = 0.0;
+	sub_msg.data.data[1] = 0.0;
+
 
 	// create publisher
 	rclc_publisher_init_default(&publisher, &node,
@@ -205,8 +270,9 @@ void StartDefaultTask(void *argument) {
 			"hinge_state");
 
 	// Create subscriber
-	rclc_subscription_init_best_effort(&subscriber, &node,
-			ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float64MultiArray), "cmd_hinge");
+	rclc_subscription_init_default(&subscriber, &node,
+			ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float64MultiArray),
+			"cmd_hinge");
 
 	// create timer
 	rclc_timer_init_default(&timer, &support, timer_period, timer_callback);
@@ -215,7 +281,8 @@ void StartDefaultTask(void *argument) {
 	executor = rclc_executor_get_zero_initialized_executor();
 	rclc_executor_init(&executor, &support.context, 2, &allocator); // total number of handles = #subscriptions + #timers
 	rclc_executor_add_timer(&executor, &timer);
-	rclc_executor_add_subscription(&executor, &subscriber, &sub_msg, &subscription_callback, ON_NEW_DATA);
+	rclc_executor_add_subscription(&executor, &subscriber, &sub_msg,
+			&subscription_callback, ON_NEW_DATA);
 	rclc_executor_spin(&executor);
 }
 /* USER CODE END 0 */
@@ -253,8 +320,14 @@ int main(void)
   MX_LPUART1_UART_Init();
   MX_TIM3_Init();
   MX_ADC1_Init();
+  MX_TIM2_Init();
+  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
-
+	tarnsport_mani_begin();
+	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+	HAL_ADC_Start_DMA(&hadc1, FlexData, 4);
+//  HAL_ADC_Start(&hadc1);
+//  HAL_ADC_PollForConversion(&hadc1, 10);
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -268,12 +341,11 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+	while (1) {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+	}
   /* USER CODE END 3 */
 }
 
@@ -293,9 +365,10 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
   RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV4;
@@ -356,11 +429,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1) {
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 #ifdef USE_FULL_ASSERT
