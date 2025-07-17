@@ -33,45 +33,45 @@ extern PID_CONTROLLER pid4;
 /*-------Configure RMX_Motor Stop------*/
 
 ///*-----Configure Motor 1 Start-----*/
-extern TIM_HandleTypeDef htim8; //For Motor 1
+extern TIM_HandleTypeDef htim1; //For Motor 1
 extern MDXX motor1;
-#define MOTOR1_TIM &htim8
+#define MOTOR1_TIM &htim1
 #define MOTOR1_TIM_CH TIM_CHANNEL_1
 #define MOTOR1_GPIOx GPIOB
-#define MOTOR1_GPIO_Pin GPIO_PIN_5
+#define MOTOR1_GPIO_Pin GPIO_PIN_13
 ///*-----Configure Motor End-----*/
 //
 ///*-----Configure Motor 2 Start-----*/
-extern TIM_HandleTypeDef htim8; //For Motor 1
+extern TIM_HandleTypeDef htim1; //For Motor 1
 extern MDXX motor2;
-#define MOTOR2_TIM &htim8
+#define MOTOR2_TIM &htim1
 #define MOTOR2_TIM_CH TIM_CHANNEL_2
 #define MOTOR2_GPIOx GPIOB
-#define MOTOR2_GPIO_Pin GPIO_PIN_4
+#define MOTOR2_GPIO_Pin GPIO_PIN_14
 ///*-----Configure Motor End-----*/
 
 /*-----Configure Motor 3 Start-----*/
-extern TIM_HandleTypeDef htim8; //For Motor 1
+extern TIM_HandleTypeDef htim1; //For Motor 1
 extern MDXX motor3;
-#define MOTOR3_TIM &htim8
+#define MOTOR3_TIM &htim1
 #define MOTOR3_TIM_CH TIM_CHANNEL_3
-#define MOTOR3_GPIOx GPIOA
-#define MOTOR3_GPIO_Pin GPIO_PIN_8
+#define MOTOR3_GPIOx GPIOB
+#define MOTOR3_GPIO_Pin GPIO_PIN_15
 /*-----Configure Motor End-----*/
 
 /*-----Configure Motor 4 Start-----*/
-extern TIM_HandleTypeDef htim8; //For Motor 1
+extern TIM_HandleTypeDef htim1; //For Motor 1
 extern MDXX motor4;
-#define MOTOR4_TIM &htim8
+#define MOTOR4_TIM &htim1
 #define MOTOR4_TIM_CH TIM_CHANNEL_4
 #define MOTOR4_GPIOx GPIOB
-#define MOTOR4_GPIO_Pin GPIO_PIN_10
+#define MOTOR4_GPIO_Pin GPIO_PIN_1
 /*-----Configure Motor End-----*/
 
 /*-----Configure Encoder Start-----*/
 extern TIM_HandleTypeDef htim3; //For QEI Encoder
 extern TIM_HandleTypeDef htim4; //For QEI Encoder
-extern TIM_HandleTypeDef htim5; //For QEI Encoder
+extern TIM_HandleTypeDef htim8; //For QEI Encoder
 extern TIM_HandleTypeDef htim20; //For QEI Encoder
 extern QEI encoder1;
 extern QEI encoder2;
@@ -79,7 +79,7 @@ extern QEI encoder3;
 extern QEI encoder4;
 #define ENC_TIM1 &htim3
 #define ENC_TIM2 &htim4
-#define ENC_TIM3 &htim5
+#define ENC_TIM3 &htim8
 #define ENC_TIM4 &htim20
 #define ENC_PPR 8192.0
 #define ENC_FREQ 1000
