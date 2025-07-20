@@ -126,8 +126,8 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time) {
 		// limit 1 = trick
 		FL_limit1 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5);
 		FL_limit2 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);
-		BL_limit1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
-		BL_limit2 = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
+//		BL_limit1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
+//		BL_limit2 = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
 
 //		Flex1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
 //		Flex2 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1);
@@ -138,36 +138,36 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time) {
 //		MDXX_set_range(&BL_motor, 2000, cmd_vel2);
 
 		if (cmd_FL_hinge == 1) {
-			if (FL_photo1 == 1 && FL_photo2 == 1 && FL_limit1 == 0
-					&& FL_limit2 == 0) {
-				MDXX_set_range(&FL_motor, 2000, -65535); // down
+//			if (FL_limit1 == 0
+//					&& FL_limit2 == 0) {
+				MDXX_set_range(&FL_motor, 2000, 65535); // down
 				FL_hinge_state = 1;
-			} else if (FL_limit1 == 1 || FL_limit2 == 1) {
-				MDXX_set_range(&FL_motor, 2000, 0); // stop
-				FL_hinge_state = 0;
-			}
+//			} else if (FL_limit1 == 1 || FL_limit2 == 1) {
+//				MDXX_set_range(&FL_motor, 2000, 0); // stop
+//				FL_hinge_state = 0;
+//			}
 		} else if (cmd_FL_hinge == 0) {
 			MDXX_set_range(&FL_motor, 2000, 0); // stop
 			FL_hinge_state = 0;
 		} else if (cmd_FL_hinge == -1) {
-			MDXX_set_range(&FL_motor, 2000, 65535); // up
+			MDXX_set_range(&FL_motor, 2000, -65535); // up
 			FL_hinge_state = -1;
 		}
 
 		if (cmd_BL_hinge == 1) {
-			if (BL_photo1 == 1 && BL_photo2 == 1 && BL_limit1 == 0
-					&& BL_limit2 == 0) {
-				MDXX_set_range(&BL_motor, 2000, -65535); // down
-				BL_hinge_state = 1;
-			} else if (BL_limit1 == 1 && BL_limit2 == 1) {
-				MDXX_set_range(&BL_motor, 2000, 0); // stop
-				BL_hinge_state = 0;
-			}
+//			if (FL_limit1 == 0
+//					&& FL_limit2 == 0) {
+				MDXX_set_range(&BL_motor, 2000, 65535); // down
+//				BL_hinge_state = 1;
+//			} else if (FL_limit1 == 1 && FL_limit2 == 1) {
+//				MDXX_set_range(&BL_motor, 2000, 0); // stop
+//				BL_hinge_state = 0;
+//			}
 		} else if (cmd_BL_hinge == 0) {
 			MDXX_set_range(&BL_motor, 2000, 0); // stop
 			BL_hinge_state = 0;
 		} else if (cmd_BL_hinge == -1) {
-			MDXX_set_range(&BL_motor, 2000, 65535); // up
+			MDXX_set_range(&BL_motor, 2000, -65535); // up
 			BL_hinge_state = -1;
 		}
 
@@ -190,7 +190,6 @@ void subscription_callback(const void *msgin) {
 			(const std_msgs__msg__Float64MultiArray*) msgin;
 
 	// Extract commands: 1 = down, 0 = stop, -1 = up
-	cmd_vel1 =99;
 	if (msg->data.size >= 2) {
 		cmd_FL_hinge = (int)msg->data.data[0];
 		cmd_BL_hinge = (int)msg->data.data[1];

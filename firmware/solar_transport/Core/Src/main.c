@@ -225,7 +225,7 @@ void StartDefaultTask(void *argument) {
 			"robot_pos");
 
 	// Create subscriber
-	rclc_subscription_init_best_effort(&subscriber, &node,
+	rclc_subscription_init_default(&subscriber, &node,
 			ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Twist), "cmd_vel");
 
 	//create timer
@@ -233,8 +233,8 @@ void StartDefaultTask(void *argument) {
 
 	//create executor
 	executor = rclc_executor_get_zero_initialized_executor();
-	rclc_executor_init(&executor, &support.context, 1, &allocator); // total number of handles = #subscriptions + #timers
-//	rclc_executor_add_timer(&executor, &timer);
+	rclc_executor_init(&executor, &support.context, 2, &allocator); // total number of handles = #subscriptions + #timers
+	rclc_executor_add_timer(&executor, &timer);
 	rclc_executor_add_subscription(&executor, &subscriber, &sub_msg,
 			&subscription_callback, ON_NEW_DATA);
 	rclc_executor_spin(&executor);
@@ -401,10 +401,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //				PID_CONTROLLER_Compute(&pid4, setpointR - filteredValue4),
 //				65535, -65535);
 
-		cmd_vel1 = mapf(setpointL, -1.3, 1.3, -65535.0, 65535.0);
-		cmd_vel2 = mapf(setpointL, -1.3, 1.3, -65535.0, 65535.0);
-		cmd_vel3 = mapf(setpointR, -1.3, 1.3, -65535.0, 65535.0);
-		cmd_vel4 = mapf(setpointR, -1.3, 1.3, -65535.0, 65535.0);
+		cmd_vel1 = setpointL * 65535.0 / 0.24;
+		cmd_vel2 = setpointL * 65535.0 / 0.24;
+		cmd_vel3 = setpointR * 65535.0 / 0.24;
+		cmd_vel4 = setpointR * 65535.0 / 0.24;
 
 		if (setpointL == 0.0 && setpointR == 0.0) {
 			cmd_vel1 = 0.0;

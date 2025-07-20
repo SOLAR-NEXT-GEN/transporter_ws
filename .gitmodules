@@ -46,3 +46,6 @@
 [submodule "src/ros2_twist_mux"]
 	path = src/ros2_twist_mux
 	url = https://github.com/pboon09/ros2_twist_mux.git
+[submodule "src/hwt101ct_tilt_angle_sensor"]
+	path = src/hwt101ct_tilt_angle_sensor
+	url = https://github.com/pboon09/hwt101ct_tilt_angle_sensor.git
