@@ -100,6 +100,8 @@ const unsigned int timer_period = RCL_MS_TO_NS(10);
 const int timeout_ms = 1000;
 
 float linear_x, linear_y, linear_z, angular_x, angular_y, angular_z;
+
+int dummy;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -171,6 +173,8 @@ void subscription_callback(const void *msgin) {
 
 	setpointL = robot_kinematics.left_cmd;
 	setpointR = robot_kinematics.right_cmd;
+
+	dummy++;
 }
 
 void StartDefaultTask(void *argument) {
