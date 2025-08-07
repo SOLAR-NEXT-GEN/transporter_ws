@@ -1,32 +1,18 @@
 [submodule "src/transporter_interface"]
 	path = src/transporter_interface
 	url = https://github.com/SOLAR-NEXT-GEN/transporter_interface.git
-[submodule "src/transporter_realsense"]
-	path = src/transporter_realsense
-	url = https://github.com/SOLAR-NEXT-GEN/transporter_realsense.git
 [submodule "src/transporter_description"]
 	path = src/transporter_description
 	url = https://github.com/SOLAR-NEXT-GEN/transporter_description.git
 [submodule "src/transporter_bringup"]
 	path = src/transporter_bringup
 	url = https://github.com/SOLAR-NEXT-GEN/transporter_bringup.git
-[submodule "src/transporter_rtk"]
-	path = src/transporter_rtk
-	url = https://github.com/SOLAR-NEXT-GEN/transporter_rtk.git
 [submodule "src/sparkfun_rtk_express"]
 	path = src/sparkfun_rtk_express
 	url = https://github.com/pboon09/sparkfun_rtk_express.git
 [submodule "src/transporter_joy"]
 	path = src/transporter_joy
 	url = https://github.com/SOLAR-NEXT-GEN/transporter_joy.git
-[submodule "firmware/Adafruit-9-DOF-Absolute-Orientation-IMU-Fusion-Breakout---BNO055"]
-	path = firmware/Adafruit-9-DOF-Absolute-Orientation-IMU-Fusion-Breakout---BNO055
-	url = https://github.com/SOLAR-NEXT-GEN/Adafruit-9-DOF-Absolute-Orientation-IMU-Fusion-Breakout---BNO055.git
-	branch = G4_NO_UROS
-[submodule "firmware/imu_uros"]
-	path = firmware/imu_uros
-	url = https://github.com/SOLAR-NEXT-GEN/Adafruit-9-DOF-Absolute-Orientation-IMU-Fusion-Breakout---BNO055.git
-	branch = G4_UROS_UART
 [submodule "src/transporter_imu"]
 	path = src/transporter_imu
 	url = https://github.com/SOLAR-NEXT-GEN/transporter_imu.git
@@ -49,3 +35,6 @@
 [submodule "src/hwt101ct_tilt_angle_sensor"]
 	path = src/hwt101ct_tilt_angle_sensor
 	url = https://github.com/pboon09/hwt101ct_tilt_angle_sensor.git
+[submodule "firmware/BNO055_uros"]
+	path = firmware/BNO055_uros
+	url = https://github.com/pboon09/BNO055_uros.git

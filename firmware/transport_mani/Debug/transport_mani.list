@@ -4503,12 +4503,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  8002408:	4b72      	ldr	r3, [pc, #456]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
  800240a:	2201      	movs	r2, #1
  800240c:	601a      	str	r2, [r3, #0]
- 800240e:	e084      	b.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 800240e:	e083      	b.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 			} else if (cmd_FL_hinge == -1) {
  8002410:	4b6f      	ldr	r3, [pc, #444]	@ (80025d0 <HAL_TIM_PeriodElapsedCallback+0x2a8>)
  8002412:	681b      	ldr	r3, [r3, #0]
  8002414:	f1b3 3fff 	cmp.w	r3, #4294967295	@ 0xffffffff
- 8002418:	d17f      	bne.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 8002418:	d17e      	bne.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 				FL_timer_down = 0;
  800241a:	4b6f      	ldr	r3, [pc, #444]	@ (80025d8 <HAL_TIM_PeriodElapsedCallback+0x2b0>)
  800241c:	2200      	movs	r2, #0
@@ -4521,7 +4521,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  8002426:	4b6b      	ldr	r3, [pc, #428]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
  8002428:	f04f 32ff 	mov.w	r2, #4294967295	@ 0xffffffff
  800242c:	601a      	str	r2, [r3, #0]
- 800242e:	e074      	b.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 800242e:	e073      	b.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 			}
 		}
 
@@ -4539,17 +4539,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  8002440:	4b64      	ldr	r3, [pc, #400]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
  8002442:	2200      	movs	r2, #0
  8002444:	601a      	str	r2, [r3, #0]
- 8002446:	e068      	b.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 8002446:	e067      	b.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 			} else if (cmd_FL_hinge == -1) {
  8002448:	4b61      	ldr	r3, [pc, #388]	@ (80025d0 <HAL_TIM_PeriodElapsedCallback+0x2a8>)
  800244a:	681b      	ldr	r3, [r3, #0]
  800244c:	f1b3 3fff 	cmp.w	r3, #4294967295	@ 0xffffffff
- 8002450:	d163      	bne.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 8002450:	d162      	bne.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 				FL_hinge_state = -1;
  8002452:	4b60      	ldr	r3, [pc, #384]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
  8002454:	f04f 32ff 	mov.w	r2, #4294967295	@ 0xffffffff
  8002458:	601a      	str	r2, [r3, #0]
- 800245a:	e05e      	b.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 800245a:	e05d      	b.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 			}
 		}
 
@@ -4562,12 +4562,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  8002464:	4b5a      	ldr	r3, [pc, #360]	@ (80025d0 <HAL_TIM_PeriodElapsedCallback+0x2a8>)
  8002466:	681b      	ldr	r3, [r3, #0]
  8002468:	2b00      	cmp	r3, #0
- 800246a:	d156      	bne.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 800246a:	d155      	bne.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 				FL_hinge_state = 0;
  800246c:	4b59      	ldr	r3, [pc, #356]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
  800246e:	2200      	movs	r2, #0
  8002470:	601a      	str	r2, [r3, #0]
- 8002472:	e052      	b.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 8002472:	e051      	b.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 			}
 		}
 
@@ -4575,7 +4575,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  8002474:	4b57      	ldr	r3, [pc, #348]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
  8002476:	681b      	ldr	r3, [r3, #0]
  8002478:	2b01      	cmp	r3, #1
- 800247a:	d12c      	bne.n	80024d6 <HAL_TIM_PeriodElapsedCallback+0x1ae>
+ 800247a:	d12b      	bne.n	80024d4 <HAL_TIM_PeriodElapsedCallback+0x1ac>
 			FL_timer_down++;
  800247c:	4b56      	ldr	r3, [pc, #344]	@ (80025d8 <HAL_TIM_PeriodElapsedCallback+0x2b0>)
  800247e:	681b      	ldr	r3, [r3, #0]
@@ -4597,7 +4597,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  800249a:	ed9f 0a52 	vldr	s0, [pc, #328]	@ 80025e4 <HAL_TIM_PeriodElapsedCallback+0x2bc>
  800249e:	4852      	ldr	r0, [pc, #328]	@ (80025e8 <HAL_TIM_PeriodElapsedCallback+0x2c0>)
  80024a0:	f7fe fd96 	bl	8000fd0 <MDXX_set_range>
- 80024a4:	e039      	b.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 80024a4:	e038      	b.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 			} else {
 				FL_hinge_state = 2; // stopped by limit
  80024a6:	4b4b      	ldr	r3, [pc, #300]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
@@ -4609,144 +4609,144 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  80024b4:	484c      	ldr	r0, [pc, #304]	@ (80025e8 <HAL_TIM_PeriodElapsedCallback+0x2c0>)
  80024b6:	f7fe fd8b 	bl	8000fd0 <MDXX_set_range>
 
-				if (FL_timer_down < 7700) {
+				if (FL_timer_down < 4800) {
  80024ba:	4b47      	ldr	r3, [pc, #284]	@ (80025d8 <HAL_TIM_PeriodElapsedCallback+0x2b0>)
  80024bc:	681b      	ldr	r3, [r3, #0]
- 80024be:	f641 6213 	movw	r2, #7699	@ 0x1e13
- 80024c2:	4293      	cmp	r3, r2
- 80024c4:	d829      	bhi.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 80024be:	f5b3 5f96 	cmp.w	r3, #4800	@ 0x12c0
+ 80024c2:	d229      	bcs.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 					FL_timer_up = 0;
- 80024c6:	4b45      	ldr	r3, [pc, #276]	@ (80025dc <HAL_TIM_PeriodElapsedCallback+0x2b4>)
- 80024c8:	2200      	movs	r2, #0
- 80024ca:	601a      	str	r2, [r3, #0]
+ 80024c4:	4b45      	ldr	r3, [pc, #276]	@ (80025dc <HAL_TIM_PeriodElapsedCallback+0x2b4>)
+ 80024c6:	2200      	movs	r2, #0
+ 80024c8:	601a      	str	r2, [r3, #0]
 					FL_hinge_state = -1;
- 80024cc:	4b41      	ldr	r3, [pc, #260]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
- 80024ce:	f04f 32ff 	mov.w	r2, #4294967295	@ 0xffffffff
- 80024d2:	601a      	str	r2, [r3, #0]
- 80024d4:	e021      	b.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 80024ca:	4b42      	ldr	r3, [pc, #264]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
+ 80024cc:	f04f 32ff 	mov.w	r2, #4294967295	@ 0xffffffff
+ 80024d0:	601a      	str	r2, [r3, #0]
+ 80024d2:	e021      	b.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 				}
 			}
 		}
 
 		else if (FL_hinge_state == -1) { // up
- 80024d6:	4b3f      	ldr	r3, [pc, #252]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
- 80024d8:	681b      	ldr	r3, [r3, #0]
- 80024da:	f1b3 3fff 	cmp.w	r3, #4294967295	@ 0xffffffff
- 80024de:	d11c      	bne.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 80024d4:	4b3f      	ldr	r3, [pc, #252]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
+ 80024d6:	681b      	ldr	r3, [r3, #0]
+ 80024d8:	f1b3 3fff 	cmp.w	r3, #4294967295	@ 0xffffffff
+ 80024dc:	d11c      	bne.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 			FL_timer_up++;
- 80024e0:	4b3e      	ldr	r3, [pc, #248]	@ (80025dc <HAL_TIM_PeriodElapsedCallback+0x2b4>)
- 80024e2:	681b      	ldr	r3, [r3, #0]
- 80024e4:	3301      	adds	r3, #1
- 80024e6:	4a3d      	ldr	r2, [pc, #244]	@ (80025dc <HAL_TIM_PeriodElapsedCallback+0x2b4>)
- 80024e8:	6013      	str	r3, [r2, #0]
+ 80024de:	4b3f      	ldr	r3, [pc, #252]	@ (80025dc <HAL_TIM_PeriodElapsedCallback+0x2b4>)
+ 80024e0:	681b      	ldr	r3, [r3, #0]
+ 80024e2:	3301      	adds	r3, #1
+ 80024e4:	4a3d      	ldr	r2, [pc, #244]	@ (80025dc <HAL_TIM_PeriodElapsedCallback+0x2b4>)
+ 80024e6:	6013      	str	r3, [r2, #0]
 
-			if (FL_timer_up > 10500) {
- 80024ea:	4b3c      	ldr	r3, [pc, #240]	@ (80025dc <HAL_TIM_PeriodElapsedCallback+0x2b4>)
- 80024ec:	681b      	ldr	r3, [r3, #0]
- 80024ee:	f642 1204 	movw	r2, #10500	@ 0x2904
- 80024f2:	4293      	cmp	r3, r2
- 80024f4:	d90a      	bls.n	800250c <HAL_TIM_PeriodElapsedCallback+0x1e4>
+			if (FL_timer_up > 7000) {
+ 80024e8:	4b3c      	ldr	r3, [pc, #240]	@ (80025dc <HAL_TIM_PeriodElapsedCallback+0x2b4>)
+ 80024ea:	681b      	ldr	r3, [r3, #0]
+ 80024ec:	f641 3258 	movw	r2, #7000	@ 0x1b58
+ 80024f0:	4293      	cmp	r3, r2
+ 80024f2:	d90a      	bls.n	800250a <HAL_TIM_PeriodElapsedCallback+0x1e2>
 				FL_hinge_state = 3; // stop after timeout
- 80024f6:	4b37      	ldr	r3, [pc, #220]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
- 80024f8:	2203      	movs	r2, #3
- 80024fa:	601a      	str	r2, [r3, #0]
+ 80024f4:	4b37      	ldr	r3, [pc, #220]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
+ 80024f6:	2203      	movs	r2, #3
+ 80024f8:	601a      	str	r2, [r3, #0]
 				MDXX_set_range(&FL_motor, 2000, 0);
- 80024fc:	eddf 0a3b 	vldr	s1, [pc, #236]	@ 80025ec <HAL_TIM_PeriodElapsedCallback+0x2c4>
- 8002500:	ed9f 0a38 	vldr	s0, [pc, #224]	@ 80025e4 <HAL_TIM_PeriodElapsedCallback+0x2bc>
- 8002504:	4838      	ldr	r0, [pc, #224]	@ (80025e8 <HAL_TIM_PeriodElapsedCallback+0x2c0>)
- 8002506:	f7fe fd63 	bl	8000fd0 <MDXX_set_range>
- 800250a:	e006      	b.n	800251a <HAL_TIM_PeriodElapsedCallback+0x1f2>
+ 80024fa:	eddf 0a3c 	vldr	s1, [pc, #240]	@ 80025ec <HAL_TIM_PeriodElapsedCallback+0x2c4>
+ 80024fe:	ed9f 0a39 	vldr	s0, [pc, #228]	@ 80025e4 <HAL_TIM_PeriodElapsedCallback+0x2bc>
+ 8002502:	4839      	ldr	r0, [pc, #228]	@ (80025e8 <HAL_TIM_PeriodElapsedCallback+0x2c0>)
+ 8002504:	f7fe fd64 	bl	8000fd0 <MDXX_set_range>
+ 8002508:	e006      	b.n	8002518 <HAL_TIM_PeriodElapsedCallback+0x1f0>
 			} else {
 				MDXX_set_range(&FL_motor, 2000, -65535);
- 800250c:	eddf 0a38 	vldr	s1, [pc, #224]	@ 80025f0 <HAL_TIM_PeriodElapsedCallback+0x2c8>
- 8002510:	ed9f 0a34 	vldr	s0, [pc, #208]	@ 80025e4 <HAL_TIM_PeriodElapsedCallback+0x2bc>
- 8002514:	4834      	ldr	r0, [pc, #208]	@ (80025e8 <HAL_TIM_PeriodElapsedCallback+0x2c0>)
- 8002516:	f7fe fd5b 	bl	8000fd0 <MDXX_set_range>
+ 800250a:	eddf 0a39 	vldr	s1, [pc, #228]	@ 80025f0 <HAL_TIM_PeriodElapsedCallback+0x2c8>
+ 800250e:	ed9f 0a35 	vldr	s0, [pc, #212]	@ 80025e4 <HAL_TIM_PeriodElapsedCallback+0x2bc>
+ 8002512:	4835      	ldr	r0, [pc, #212]	@ (80025e8 <HAL_TIM_PeriodElapsedCallback+0x2c0>)
+ 8002514:	f7fe fd5c 	bl	8000fd0 <MDXX_set_range>
 			}
 		}
 
 		if (FL_hinge_state == 0 || FL_hinge_state == 2 || FL_hinge_state == 3) {
- 800251a:	4b2e      	ldr	r3, [pc, #184]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
- 800251c:	681b      	ldr	r3, [r3, #0]
- 800251e:	2b00      	cmp	r3, #0
- 8002520:	d007      	beq.n	8002532 <HAL_TIM_PeriodElapsedCallback+0x20a>
- 8002522:	4b2c      	ldr	r3, [pc, #176]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
- 8002524:	681b      	ldr	r3, [r3, #0]
- 8002526:	2b02      	cmp	r3, #2
- 8002528:	d003      	beq.n	8002532 <HAL_TIM_PeriodElapsedCallback+0x20a>
- 800252a:	4b2a      	ldr	r3, [pc, #168]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
- 800252c:	681b      	ldr	r3, [r3, #0]
- 800252e:	2b03      	cmp	r3, #3
- 8002530:	d10c      	bne.n	800254c <HAL_TIM_PeriodElapsedCallback+0x224>
+ 8002518:	4b2e      	ldr	r3, [pc, #184]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
+ 800251a:	681b      	ldr	r3, [r3, #0]
+ 800251c:	2b00      	cmp	r3, #0
+ 800251e:	d007      	beq.n	8002530 <HAL_TIM_PeriodElapsedCallback+0x208>
+ 8002520:	4b2c      	ldr	r3, [pc, #176]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
+ 8002522:	681b      	ldr	r3, [r3, #0]
+ 8002524:	2b02      	cmp	r3, #2
+ 8002526:	d003      	beq.n	8002530 <HAL_TIM_PeriodElapsedCallback+0x208>
+ 8002528:	4b2a      	ldr	r3, [pc, #168]	@ (80025d4 <HAL_TIM_PeriodElapsedCallback+0x2ac>)
+ 800252a:	681b      	ldr	r3, [r3, #0]
+ 800252c:	2b03      	cmp	r3, #3
+ 800252e:	d10c      	bne.n	800254a <HAL_TIM_PeriodElapsedCallback+0x222>
 			MDXX_set_range(&FL_motor, 2000, 0);
- 8002532:	eddf 0a2e 	vldr	s1, [pc, #184]	@ 80025ec <HAL_TIM_PeriodElapsedCallback+0x2c4>
- 8002536:	ed9f 0a2b 	vldr	s0, [pc, #172]	@ 80025e4 <HAL_TIM_PeriodElapsedCallback+0x2bc>
- 800253a:	482b      	ldr	r0, [pc, #172]	@ (80025e8 <HAL_TIM_PeriodElapsedCallback+0x2c0>)
- 800253c:	f7fe fd48 	bl	8000fd0 <MDXX_set_range>
+ 8002530:	eddf 0a2e 	vldr	s1, [pc, #184]	@ 80025ec <HAL_TIM_PeriodElapsedCallback+0x2c4>
+ 8002534:	ed9f 0a2b 	vldr	s0, [pc, #172]	@ 80025e4 <HAL_TIM_PeriodElapsedCallback+0x2bc>
+ 8002538:	482b      	ldr	r0, [pc, #172]	@ (80025e8 <HAL_TIM_PeriodElapsedCallback+0x2c0>)
+ 800253a:	f7fe fd49 	bl	8000fd0 <MDXX_set_range>
 			FL_timer_down = 0;
- 8002540:	4b25      	ldr	r3, [pc, #148]	@ (80025d8 <HAL_TIM_PeriodElapsedCallback+0x2b0>)
- 8002542:	2200      	movs	r2, #0
- 8002544:	601a      	str	r2, [r3, #0]
+ 800253e:	4b26      	ldr	r3, [pc, #152]	@ (80025d8 <HAL_TIM_PeriodElapsedCallback+0x2b0>)
+ 8002540:	2200      	movs	r2, #0
+ 8002542:	601a      	str	r2, [r3, #0]
 			FL_timer_up = 0;
- 8002546:	4b25      	ldr	r3, [pc, #148]	@ (80025dc <HAL_TIM_PeriodElapsedCallback+0x2b4>)
- 8002548:	2200      	movs	r2, #0
- 800254a:	601a      	str	r2, [r3, #0]
+ 8002544:	4b25      	ldr	r3, [pc, #148]	@ (80025dc <HAL_TIM_PeriodElapsedCallback+0x2b4>)
+ 8002546:	2200      	movs	r2, #0
+ 8002548:	601a      	str	r2, [r3, #0]
 		}
 		///////////////////////////////////////////////
 
 		// BL_hinge down 6 s, up 8 s
 		if (cmd_BL_hinge == 0) {
- 800254c:	4b29      	ldr	r3, [pc, #164]	@ (80025f4 <HAL_TIM_PeriodElapsedCallback+0x2cc>)
- 800254e:	681b      	ldr	r3, [r3, #0]
- 8002550:	2b00      	cmp	r3, #0
- 8002552:	d102      	bne.n	800255a <HAL_TIM_PeriodElapsedCallback+0x232>
+ 800254a:	4b2a      	ldr	r3, [pc, #168]	@ (80025f4 <HAL_TIM_PeriodElapsedCallback+0x2cc>)
+ 800254c:	681b      	ldr	r3, [r3, #0]
+ 800254e:	2b00      	cmp	r3, #0
+ 8002550:	d102      	bne.n	8002558 <HAL_TIM_PeriodElapsedCallback+0x230>
 			BL_hinge_state = 0; // manual stop
- 8002554:	4b28      	ldr	r3, [pc, #160]	@ (80025f8 <HAL_TIM_PeriodElapsedCallback+0x2d0>)
- 8002556:	2200      	movs	r2, #0
- 8002558:	601a      	str	r2, [r3, #0]
+ 8002552:	4b29      	ldr	r3, [pc, #164]	@ (80025f8 <HAL_TIM_PeriodElapsedCallback+0x2d0>)
+ 8002554:	2200      	movs	r2, #0
+ 8002556:	601a      	str	r2, [r3, #0]
 		}
 
 		if (BL_hinge_state == 0) { // stopped (manual or initial)
- 800255a:	4b27      	ldr	r3, [pc, #156]	@ (80025f8 <HAL_TIM_PeriodElapsedCallback+0x2d0>)
- 800255c:	681b      	ldr	r3, [r3, #0]
- 800255e:	2b00      	cmp	r3, #0
- 8002560:	d150      	bne.n	8002604 <HAL_TIM_PeriodElapsedCallback+0x2dc>
+ 8002558:	4b27      	ldr	r3, [pc, #156]	@ (80025f8 <HAL_TIM_PeriodElapsedCallback+0x2d0>)
+ 800255a:	681b      	ldr	r3, [r3, #0]
+ 800255c:	2b00      	cmp	r3, #0
+ 800255e:	d151      	bne.n	8002604 <HAL_TIM_PeriodElapsedCallback+0x2dc>
 			if (cmd_BL_hinge == 1) {
- 8002562:	4b24      	ldr	r3, [pc, #144]	@ (80025f4 <HAL_TIM_PeriodElapsedCallback+0x2cc>)
- 8002564:	681b      	ldr	r3, [r3, #0]
- 8002566:	2b01      	cmp	r3, #1
- 8002568:	d109      	bne.n	800257e <HAL_TIM_PeriodElapsedCallback+0x256>
+ 8002560:	4b24      	ldr	r3, [pc, #144]	@ (80025f4 <HAL_TIM_PeriodElapsedCallback+0x2cc>)
+ 8002562:	681b      	ldr	r3, [r3, #0]
+ 8002564:	2b01      	cmp	r3, #1
+ 8002566:	d109      	bne.n	800257c <HAL_TIM_PeriodElapsedCallback+0x254>
 				BL_timer_down = 0;
- 800256a:	4b24      	ldr	r3, [pc, #144]	@ (80025fc <HAL_TIM_PeriodElapsedCallback+0x2d4>)
- 800256c:	2200      	movs	r2, #0
- 800256e:	601a      	str	r2, [r3, #0]
+ 8002568:	4b24      	ldr	r3, [pc, #144]	@ (80025fc <HAL_TIM_PeriodElapsedCallback+0x2d4>)
+ 800256a:	2200      	movs	r2, #0
+ 800256c:	601a      	str	r2, [r3, #0]
 				BL_timer_up = 0;
- 8002570:	4b23      	ldr	r3, [pc, #140]	@ (8002600 <HAL_TIM_PeriodElapsedCallback+0x2d8>)
- 8002572:	2200      	movs	r2, #0
- 8002574:	601a      	str	r2, [r3, #0]
+ 800256e:	4b24      	ldr	r3, [pc, #144]	@ (8002600 <HAL_TIM_PeriodElapsedCallback+0x2d8>)
+ 8002570:	2200      	movs	r2, #0
+ 8002572:	601a      	str	r2, [r3, #0]
 				BL_hinge_state = 1; // start going down
- 8002576:	4b20      	ldr	r3, [pc, #128]	@ (80025f8 <HAL_TIM_PeriodElapsedCallback+0x2d0>)
- 8002578:	2201      	movs	r2, #1
- 800257a:	601a      	str	r2, [r3, #0]
- 800257c:	e0b6      	b.n	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
+ 8002574:	4b20      	ldr	r3, [pc, #128]	@ (80025f8 <HAL_TIM_PeriodElapsedCallback+0x2d0>)
+ 8002576:	2201      	movs	r2, #1
+ 8002578:	601a      	str	r2, [r3, #0]
+ 800257a:	e0b7      	b.n	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
 			} else if (cmd_BL_hinge == -1) {
- 800257e:	4b1d      	ldr	r3, [pc, #116]	@ (80025f4 <HAL_TIM_PeriodElapsedCallback+0x2cc>)
- 8002580:	681b      	ldr	r3, [r3, #0]
- 8002582:	f1b3 3fff 	cmp.w	r3, #4294967295	@ 0xffffffff
- 8002586:	f040 80b1 	bne.w	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
+ 800257c:	4b1d      	ldr	r3, [pc, #116]	@ (80025f4 <HAL_TIM_PeriodElapsedCallback+0x2cc>)
+ 800257e:	681b      	ldr	r3, [r3, #0]
+ 8002580:	f1b3 3fff 	cmp.w	r3, #4294967295	@ 0xffffffff
+ 8002584:	f040 80b2 	bne.w	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
 				BL_timer_down = 0;
- 800258a:	4b1c      	ldr	r3, [pc, #112]	@ (80025fc <HAL_TIM_PeriodElapsedCallback+0x2d4>)
- 800258c:	2200      	movs	r2, #0
- 800258e:	601a      	str	r2, [r3, #0]
+ 8002588:	4b1c      	ldr	r3, [pc, #112]	@ (80025fc <HAL_TIM_PeriodElapsedCallback+0x2d4>)
+ 800258a:	2200      	movs	r2, #0
+ 800258c:	601a      	str	r2, [r3, #0]
 				BL_timer_up = 0;
- 8002590:	4b1b      	ldr	r3, [pc, #108]	@ (8002600 <HAL_TIM_PeriodElapsedCallback+0x2d8>)
- 8002592:	2200      	movs	r2, #0
- 8002594:	601a      	str	r2, [r3, #0]
+ 800258e:	4b1c      	ldr	r3, [pc, #112]	@ (8002600 <HAL_TIM_PeriodElapsedCallback+0x2d8>)
+ 8002590:	2200      	movs	r2, #0
+ 8002592:	601a      	str	r2, [r3, #0]
 				BL_hinge_state = -1; // start going up
- 8002596:	4b18      	ldr	r3, [pc, #96]	@ (80025f8 <HAL_TIM_PeriodElapsedCallback+0x2d0>)
- 8002598:	f04f 32ff 	mov.w	r2, #4294967295	@ 0xffffffff
- 800259c:	601a      	str	r2, [r3, #0]
- 800259e:	e0a5      	b.n	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
+ 8002594:	4b18      	ldr	r3, [pc, #96]	@ (80025f8 <HAL_TIM_PeriodElapsedCallback+0x2d0>)
+ 8002596:	f04f 32ff 	mov.w	r2, #4294967295	@ 0xffffffff
+ 800259a:	601a      	str	r2, [r3, #0]
+ 800259c:	e0a6      	b.n	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
+ 800259e:	bf00      	nop
  80025a0:	40001000 	.word	0x40001000
  80025a4:	20004994 	.word	0x20004994
  80025a8:	48000400 	.word	0x48000400
@@ -4825,7 +4825,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  8002648:	4b69      	ldr	r3, [pc, #420]	@ (80027f0 <HAL_TIM_PeriodElapsedCallback+0x4c8>)
  800264a:	681b      	ldr	r3, [r3, #0]
  800264c:	2b01      	cmp	r3, #1
- 800264e:	d12c      	bne.n	80026aa <HAL_TIM_PeriodElapsedCallback+0x382>
+ 800264e:	d12b      	bne.n	80026a8 <HAL_TIM_PeriodElapsedCallback+0x380>
 			BL_timer_down++;
  8002650:	4b69      	ldr	r3, [pc, #420]	@ (80027f8 <HAL_TIM_PeriodElapsedCallback+0x4d0>)
  8002652:	681b      	ldr	r3, [r3, #0]
@@ -4859,41 +4859,41 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  8002688:	4860      	ldr	r0, [pc, #384]	@ (800280c <HAL_TIM_PeriodElapsedCallback+0x4e4>)
  800268a:	f7fe fca1 	bl	8000fd0 <MDXX_set_range>
 
-				if (BL_timer_down < 5700) {
+				if (BL_timer_down < 4800) {
  800268e:	4b5a      	ldr	r3, [pc, #360]	@ (80027f8 <HAL_TIM_PeriodElapsedCallback+0x4d0>)
  8002690:	681b      	ldr	r3, [r3, #0]
- 8002692:	f241 6243 	movw	r2, #5699	@ 0x1643
- 8002696:	4293      	cmp	r3, r2
- 8002698:	d828      	bhi.n	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
+ 8002692:	f5b3 5f96 	cmp.w	r3, #4800	@ 0x12c0
+ 8002696:	d229      	bcs.n	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
 					BL_timer_up = 0;
- 800269a:	4b5e      	ldr	r3, [pc, #376]	@ (8002814 <HAL_TIM_PeriodElapsedCallback+0x4ec>)
- 800269c:	2200      	movs	r2, #0
- 800269e:	601a      	str	r2, [r3, #0]
+ 8002698:	4b5e      	ldr	r3, [pc, #376]	@ (8002814 <HAL_TIM_PeriodElapsedCallback+0x4ec>)
+ 800269a:	2200      	movs	r2, #0
+ 800269c:	601a      	str	r2, [r3, #0]
 					BL_hinge_state = -1;
- 80026a0:	4b53      	ldr	r3, [pc, #332]	@ (80027f0 <HAL_TIM_PeriodElapsedCallback+0x4c8>)
- 80026a2:	f04f 32ff 	mov.w	r2, #4294967295	@ 0xffffffff
- 80026a6:	601a      	str	r2, [r3, #0]
- 80026a8:	e020      	b.n	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
+ 800269e:	4b54      	ldr	r3, [pc, #336]	@ (80027f0 <HAL_TIM_PeriodElapsedCallback+0x4c8>)
+ 80026a0:	f04f 32ff 	mov.w	r2, #4294967295	@ 0xffffffff
+ 80026a4:	601a      	str	r2, [r3, #0]
+ 80026a6:	e021      	b.n	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
 				}
 			}
 		}
 
 		else if (BL_hinge_state == -1) { // up
- 80026aa:	4b51      	ldr	r3, [pc, #324]	@ (80027f0 <HAL_TIM_PeriodElapsedCallback+0x4c8>)
- 80026ac:	681b      	ldr	r3, [r3, #0]
- 80026ae:	f1b3 3fff 	cmp.w	r3, #4294967295	@ 0xffffffff
- 80026b2:	d11b      	bne.n	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
+ 80026a8:	4b51      	ldr	r3, [pc, #324]	@ (80027f0 <HAL_TIM_PeriodElapsedCallback+0x4c8>)
+ 80026aa:	681b      	ldr	r3, [r3, #0]
+ 80026ac:	f1b3 3fff 	cmp.w	r3, #4294967295	@ 0xffffffff
+ 80026b0:	d11c      	bne.n	80026ec <HAL_TIM_PeriodElapsedCallback+0x3c4>
 			BL_timer_up++;
- 80026b4:	4b57      	ldr	r3, [pc, #348]	@ (8002814 <HAL_TIM_PeriodElapsedCallback+0x4ec>)
- 80026b6:	681b      	ldr	r3, [r3, #0]
- 80026b8:	3301      	adds	r3, #1
- 80026ba:	4a56      	ldr	r2, [pc, #344]	@ (8002814 <HAL_TIM_PeriodElapsedCallback+0x4ec>)
- 80026bc:	6013      	str	r3, [r2, #0]
+ 80026b2:	4b58      	ldr	r3, [pc, #352]	@ (8002814 <HAL_TIM_PeriodElapsedCallback+0x4ec>)
+ 80026b4:	681b      	ldr	r3, [r3, #0]
+ 80026b6:	3301      	adds	r3, #1
+ 80026b8:	4a56      	ldr	r2, [pc, #344]	@ (8002814 <HAL_TIM_PeriodElapsedCallback+0x4ec>)
+ 80026ba:	6013      	str	r3, [r2, #0]
 
-			if (BL_timer_up > 8000) {
- 80026be:	4b55      	ldr	r3, [pc, #340]	@ (8002814 <HAL_TIM_PeriodElapsedCallback+0x4ec>)
- 80026c0:	681b      	ldr	r3, [r3, #0]
- 80026c2:	f5b3 5ffa 	cmp.w	r3, #8000	@ 0x1f40
+			if (BL_timer_up > 7000) {
+ 80026bc:	4b55      	ldr	r3, [pc, #340]	@ (8002814 <HAL_TIM_PeriodElapsedCallback+0x4ec>)
+ 80026be:	681b      	ldr	r3, [r3, #0]
+ 80026c0:	f641 3258 	movw	r2, #7000	@ 0x1b58
+ 80026c4:	4293      	cmp	r3, r2
  80026c6:	d90a      	bls.n	80026de <HAL_TIM_PeriodElapsedCallback+0x3b6>
 				BL_hinge_state = 3; // stop after timeout
  80026c8:	4b49      	ldr	r3, [pc, #292]	@ (80027f0 <HAL_TIM_PeriodElapsedCallback+0x4c8>)

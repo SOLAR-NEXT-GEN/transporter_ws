@@ -427,7 +427,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				FL_hinge_state = 2; // stopped by limit
 				MDXX_set_range(&FL_motor, 2000, 0);
 
-				if (FL_timer_down < 7700) {
+				if (FL_timer_down < 4800) {
 					FL_timer_up = 0;
 					FL_hinge_state = -1;
 				}
@@ -437,7 +437,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		else if (FL_hinge_state == -1) { // up
 			FL_timer_up++;
 
-			if (FL_timer_up > 10500) {
+			if (FL_timer_up > 7000) {
 				FL_hinge_state = 3; // stop after timeout
 				MDXX_set_range(&FL_motor, 2000, 0);
 			} else {
@@ -492,7 +492,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				BL_hinge_state = 2; // stopped by limit
 				MDXX_set_range(&BL_motor, 2000, 0);
 
-				if (BL_timer_down < 5700) {
+				if (BL_timer_down < 4800) {
 					BL_timer_up = 0;
 					BL_hinge_state = -1;
 				}
@@ -502,7 +502,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		else if (BL_hinge_state == -1) { // up
 			BL_timer_up++;
 
-			if (BL_timer_up > 8000) {
+			if (BL_timer_up > 7000) {
 				BL_hinge_state = 3; // stop after timeout
 				MDXX_set_range(&BL_motor, 2000, 0);
 			} else {
