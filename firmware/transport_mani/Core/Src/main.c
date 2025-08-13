@@ -19,7 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
-#include "adc.h"
 #include "dma.h"
 #include "iwdg.h"
 #include "usart.h"
@@ -44,6 +43,8 @@
 #include <std_msgs/msg/float64_multi_array.h>
 #include <std_msgs/msg/float32_multi_array.h>
 #include <geometry_msgs/msg/twist.h>
+
+#include <example_interfaces/srv/add_two_ints.h>
 
 #include "config.h"
 /* USER CODE END Includes */
@@ -83,17 +84,63 @@ rcl_subscription_t subscriber;
 std_msgs__msg__Float64MultiArray sub_msg;
 
 int cmd_FL_hinge, cmd_BL_hinge;
-uint8_t FL_photo1, FL_photo2, BL_photo1, BL_photo2;
+
 uint8_t FL_limit1, FL_limit2, BL_limit1, BL_limit2;
-int FL_hinge_state, BL_hinge_state;
-uint32_t FL_timer_up, FL_timer_down;
-uint32_t BL_timer_up, BL_timer_down;
+
+uint8_t FL_limit_ang1;
+uint8_t BL_limit_ang2;
+
+uint8_t hinge_num;
+uint8_t hinge_action;
+uint8_t L_hinge_state;
+uint8_t R_hinge_state;
+uint32_t L_hinge_timer;
+
+uint8_t FL_flex_limit;
+uint8_t BL_flex_limit;
+uint8_t FR_flex_limit;
+uint8_t BR_flex_limit;
+uint8_t FL_flex_limit_prev;
+uint8_t BL_flex_limit_prev;
+uint8_t FR_flex_limit_prev;
+uint8_t BR_flex_limit_prev;
 
 int32_t cmd_vel1, cmd_vel2;
 uint16_t FlexData[2] = { 0 };
 float flexdata_converted[2];
 float flex_threshold = 0.9;
 int flex_output[2];
+
+rcl_service_t service;
+rcl_client_t client;
+example_interfaces__srv__AddTwoInts_Response service_response;
+example_interfaces__srv__AddTwoInts_Request service_request;
+int64_t client_response;
+example_interfaces__srv__AddTwoInts_Request client_request;
+
+int checkk = 0;
+int first_time_in;
+
+// Flags for interrupt-safe micro-ROS operations
+volatile uint8_t send_client_request_flag = 0;
+volatile uint8_t client_request_type = 0;
+volatile uint8_t condition_triggered = 0;
+
+// Flag values for different client request types
+#define CLIENT_REQ_L_DOWN_SUCCESS     1
+#define CLIENT_REQ_L_DOWN_FAIL        2
+#define CLIENT_REQ_L_READY_FOR_ORDER  3
+#define CLIENT_REQ_R_DOWN_SUCCESS     4
+#define CLIENT_REQ_R_DOWN_FAIL        5
+#define CLIENT_REQ_R_READY_FOR_ORDER  6
+#define CLIENT_REQ_FL_FLEX_PRESSED  7
+#define CLIENT_REQ_FL_FLEX_RELEASED 8
+#define CLIENT_REQ_BL_FLEX_PRESSED  9
+#define CLIENT_REQ_BL_FLEX_RELEASED 10
+#define CLIENT_REQ_FR_FLEX_PRESSED  11
+#define CLIENT_REQ_FR_FLEX_RELEASED 12
+#define CLIENT_REQ_BR_FLEX_PRESSED  13
+#define CLIENT_REQ_BR_FLEX_RELEASED 14
 
 /* USER CODE END PV */
 
@@ -113,6 +160,9 @@ void microros_deallocate(void *pointer, void *state);
 void* microros_reallocate(void *pointer, size_t size, void *state);
 void* microros_zero_allocate(size_t number_of_elements, size_t size_of_element,
 		void *state);
+
+void handle_client_requests(void);
+void send_client_request_safe(uint8_t req_type);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -123,15 +173,6 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time) {
 		rmw_uros_sync_session(timeout_ms);
 
 		// Prepare and publish multi-array message with motor data
-		if (pub_msg.data.data != NULL) {
-            pub_msg.data.data[0] = FL_hinge_state;
-            pub_msg.data.data[1] = BL_hinge_state;
-            pub_msg.data.data[2] = flex_output[0];  // 0 or 1
-            pub_msg.data.data[3] = flex_output[1];  // 0 or 1
-
-			// Publish the multi-array message
-			RCLSOFTCHECK(rcl_publish(&publisher, &pub_msg, NULL));
-		}
 
 		// Reinitialize watchdog timer
 		HAL_IWDG_Init(&hiwdg);
@@ -146,6 +187,126 @@ void subscription_callback(const void *msgin) {
 	if (msg->data.size >= 2) {
 		cmd_FL_hinge = (int) msg->data.data[0];
 		cmd_BL_hinge = (int) msg->data.data[1];
+	}
+}
+
+void service_callback(const void *client_request, void *response_msg) {
+	example_interfaces__srv__AddTwoInts_Request *req_in =
+			(example_interfaces__srv__AddTwoInts_Request*) client_request;
+	example_interfaces__srv__AddTwoInts_Response *res_in =
+			(example_interfaces__srv__AddTwoInts_Response*) response_msg;
+
+	// Handle request message and set the response message values
+	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	hinge_num = req_in->a;
+	hinge_action = req_in->b;
+	if (hinge_num == 1) {  //left
+		if (hinge_action == 0) {
+			L_hinge_state = 0; // stop
+		}
+		if (hinge_action == 1) {
+			L_hinge_state = 1; // down
+		}
+		if (hinge_action == 2) {
+			L_hinge_state = 2; // up
+		}
+	}
+	if (hinge_num == 2) { // right
+		if (hinge_action == 0) {
+			R_hinge_state = 0; // stop
+		}
+		if (hinge_action == 1) {
+			R_hinge_state = 1; // down
+		}
+		if (hinge_action == 2) {
+			R_hinge_state = 2; // up
+		}
+	}
+	res_in->sum = 1;
+}
+
+void client_callback(const void *response_msg) {
+
+	example_interfaces__srv__AddTwoInts_Response *msgin =
+			(example_interfaces__srv__AddTwoInts_Response*) response_msg;
+	client_response = msgin->sum;
+}
+
+void send_client_request_safe(uint8_t req_type) {
+	send_client_request_flag = 1;
+	client_request_type = req_type;
+}
+
+void handle_client_requests(void) {
+	if (send_client_request_flag) {
+		send_client_request_flag = 0; // Clear flag
+
+		example_interfaces__srv__AddTwoInts_Request__init(&client_request);
+		int64_t sequence_number;
+
+		switch (client_request_type) {
+		case CLIENT_REQ_L_DOWN_SUCCESS:
+			client_request.a = 4;
+			client_request.b = 0;
+			break;
+		case CLIENT_REQ_L_DOWN_FAIL:
+			client_request.a = 5;
+			client_request.b = 0;
+			break;
+		case CLIENT_REQ_L_READY_FOR_ORDER:
+			client_request.a = 3;
+			client_request.b = 0;
+			break;
+		case CLIENT_REQ_R_DOWN_SUCCESS:
+			client_request.a = 7;
+			client_request.b = 0;
+			break;
+		case CLIENT_REQ_R_DOWN_FAIL:
+			client_request.a = 8;
+			client_request.b = 0;
+			break;
+		case CLIENT_REQ_R_READY_FOR_ORDER:
+			client_request.a = 6;
+			client_request.b = 0;
+			break;
+		case CLIENT_REQ_FL_FLEX_PRESSED:
+			client_request.a = 0;
+			client_request.b = 2;
+			break;
+		case CLIENT_REQ_FL_FLEX_RELEASED:
+			client_request.a = 0;
+			client_request.b = 3;
+			break;
+		case CLIENT_REQ_BL_FLEX_PRESSED:
+			client_request.a = 0;
+			client_request.b = 4;
+			break;
+		case CLIENT_REQ_BL_FLEX_RELEASED:
+			client_request.a = 0;
+			client_request.b = 5;
+			break;
+		case CLIENT_REQ_FR_FLEX_PRESSED:
+			client_request.a = 0;
+			client_request.b = 6;
+			break;
+		case CLIENT_REQ_FR_FLEX_RELEASED:
+			client_request.a = 0;
+			client_request.b = 7;
+			break;
+		case CLIENT_REQ_BR_FLEX_PRESSED:
+			client_request.a = 0;
+			client_request.b = 8;
+			break;
+		case CLIENT_REQ_BR_FLEX_RELEASED:
+			client_request.a = 0;
+			client_request.b = 9;
+			break;
+		default:
+			return; // Invalid request type
+		}
+
+		RCLSOFTCHECK(
+				rcl_send_request(&client, &client_request, &sequence_number));
 	}
 }
 
@@ -226,16 +387,39 @@ void StartDefaultTask(void *argument) {
 			ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float64MultiArray),
 			"cmd_hinge");
 
+	//create service
+	rclc_service_init_default(&service, &node,
+			ROSIDL_GET_SRV_TYPE_SUPPORT(example_interfaces, srv, AddTwoInts),
+			"Set_Mani");
+	//create client
+	rclc_client_init_default(&client, &node,
+			ROSIDL_GET_SRV_TYPE_SUPPORT(example_interfaces, srv, AddTwoInts),
+			"/mani_state");
 	// create timer
 	rclc_timer_init_default(&timer, &support, timer_period, timer_callback);
 
 	// create executor
 	executor = rclc_executor_get_zero_initialized_executor();
-	rclc_executor_init(&executor, &support.context, 2, &allocator); // total number of handles = #subscriptions + #timers
+	rclc_executor_init(&executor, &support.context, 4, &allocator); // total number of handles = #subscriptions + #timers
 	rclc_executor_add_timer(&executor, &timer);
 	rclc_executor_add_subscription(&executor, &subscriber, &sub_msg,
 			&subscription_callback, ON_NEW_DATA);
-	rclc_executor_spin(&executor);
+	rclc_executor_add_service(&executor, &service, &service_request,
+			&service_response, service_callback);
+	rclc_executor_add_client(&executor, &client, client_response,
+			client_callback);
+
+	// Main task loop with non-blocking executor
+	while (1) {
+		// Process ROS messages for up to 10ms
+		rclc_executor_spin_some(&executor, RCL_MS_TO_NS(10));
+
+		// Handle client requests from interrupt flags
+		handle_client_requests();
+
+		// Small delay to prevent CPU overload and let other tasks run
+		osDelay(1);
+	}
 }
 /* USER CODE END 0 */
 
@@ -271,13 +455,12 @@ int main(void)
   MX_DMA_Init();
   MX_LPUART1_UART_Init();
   MX_TIM3_Init();
-  MX_ADC1_Init();
   MX_TIM2_Init();
   MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
 	tarnsport_mani_begin();
-	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
-	HAL_ADC_Start_DMA(&hadc1, FlexData, 2);
+//	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+//	HAL_ADC_Start_DMA(&hadc1, FlexData, 2);
 //  HAL_ADC_Start(&hadc1);
 //  HAL_ADC_PollForConversion(&hadc1, 10);
   /* USER CODE END 2 */
@@ -372,170 +555,122 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* USER CODE BEGIN Callback 1 */
 	if (htim == &htim2) {
 
-		// photo 0 = found
-		FL_photo1 = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5);
-		FL_photo2 = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4);
-		BL_photo1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
-		BL_photo2 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9);
+		// Read GPIO inputs first (fast operations)
+		FL_limit_ang1 = !HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6);
+		BL_limit_ang2 = !HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
 
 		// limit 1 = trick
-		FL_limit1 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5);
-		FL_limit2 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);
-		BL_limit1 = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
-		BL_limit2 = !HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
+		FL_limit1 = !HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_0); // wait for real pin
+		FL_limit2 = !HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);
+		BL_limit1 = !HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
+		BL_limit2 = !HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_1); // wait for real pin
 
-//		MDXX_set_range(&FL_motor, 2000, cmd_vel1);
-//		MDXX_set_range(&BL_motor, 2000, cmd_vel2);
-
-		// FL_hinge down 8 s, up 10 s
-		if (cmd_FL_hinge == 0) {
-			FL_hinge_state = 0; // manual stop
-		}
-
-		if (FL_hinge_state == 0) { // stopped (manual or initial)
-			if (cmd_FL_hinge == 1) {
-				FL_timer_down = 0;
-				FL_timer_up = 0;
-				FL_hinge_state = 1; // start going down
-			} else if (cmd_FL_hinge == -1) {
-				FL_timer_down = 0;
-				FL_timer_up = 0;
-				FL_hinge_state = -1; // start going up
-			}
-		}
-
-		else if (FL_hinge_state == 2) { // stopped by limit
-			if (cmd_FL_hinge == 0) {
-				FL_hinge_state = 0;
-			} else if (cmd_FL_hinge == -1) {
-				FL_hinge_state = -1;
-			}
-		}
-
-		else if (FL_hinge_state == 3) { // stopped by timeout
-			if (cmd_FL_hinge == 0) {
-				FL_hinge_state = 0;
-			}
-		}
-
-		else if (FL_hinge_state == 1) { // down
-			FL_timer_down++;
-
-			if (FL_limit1 == 0 && FL_limit2 == 0) {
-				MDXX_set_range(&FL_motor, 2000, 65535);
+		// Motor control logic
+		if (L_hinge_state == 1) {
+			if ((FL_limit1 || FL_limit2) ) {
+				MDXX_set_range(&FL_motor, 2000, 0);     // stop
 			} else {
-				FL_hinge_state = 2; // stopped by limit
-				MDXX_set_range(&FL_motor, 2000, 0);
+				MDXX_set_range(&FL_motor, 2000, 65535); // going down
+			}
+			if ((BL_limit1 || BL_limit2) ) {
+				MDXX_set_range(&BL_motor, 2000, 0);    // stop
+			} else {
+				MDXX_set_range(&BL_motor, 2000, 65535);  // going down
+			}
 
-				if (FL_timer_down < 4800) {
-					FL_timer_up = 0;
-					FL_hinge_state = -1;
+			if ((((FL_limit1 || FL_limit2) && FL_limit_ang1) && ((BL_limit1 || BL_limit2) && BL_limit_ang2))) {
+
+				if (!condition_triggered) { // Only trigger once
+					condition_triggered = 1;
+					send_client_request_safe(CLIENT_REQ_L_DOWN_SUCCESS);
+					L_hinge_state = 0;
 				}
 			}
+
+			if (((FL_limit1 || FL_limit2) && !FL_limit_ang1) || (((BL_limit1 || BL_limit2)) && !BL_limit_ang2)) {
+
+				send_client_request_safe(CLIENT_REQ_L_DOWN_FAIL);
+				L_hinge_state = 2;
+				L_hinge_timer = 0;
+			}
 		}
 
-		else if (FL_hinge_state == -1) { // up
-			FL_timer_up++;
-
-			if (FL_timer_up > 7000) {
-				FL_hinge_state = 3; // stop after timeout
+		if (L_hinge_state == 2) {
+			if (first_time_in == 0) {
+				L_hinge_timer = 0;
+				first_time_in = 1;
+			}
+			L_hinge_timer++;
+			MDXX_set_range(&FL_motor, 2000, -65535);
+			MDXX_set_range(&BL_motor, 2000, -65535);  //  up
+			if (L_hinge_timer >= 10000) {
 				MDXX_set_range(&FL_motor, 2000, 0);
-			} else {
-				MDXX_set_range(&FL_motor, 2000, -65535);
-			}
-		}
-
-		if (FL_hinge_state == 0 || FL_hinge_state == 2 || FL_hinge_state == 3) {
-			MDXX_set_range(&FL_motor, 2000, 0);
-			FL_timer_down = 0;
-			FL_timer_up = 0;
-		}
-		///////////////////////////////////////////////
-
-		// BL_hinge down 6 s, up 8 s
-		if (cmd_BL_hinge == 0) {
-			BL_hinge_state = 0; // manual stop
-		}
-
-		if (BL_hinge_state == 0) { // stopped (manual or initial)
-			if (cmd_BL_hinge == 1) {
-				BL_timer_down = 0;
-				BL_timer_up = 0;
-				BL_hinge_state = 1; // start going down
-			} else if (cmd_BL_hinge == -1) {
-				BL_timer_down = 0;
-				BL_timer_up = 0;
-				BL_hinge_state = -1; // start going up
-			}
-		}
-
-		else if (BL_hinge_state == 2) { // stopped by limit
-			if (cmd_BL_hinge == 0) {
-				BL_hinge_state = 0;
-			} else if (cmd_BL_hinge == -1) {
-				BL_hinge_state = -1;
-			}
-		}
-
-		else if (BL_hinge_state == 3) { // stopped by timeout
-			if (cmd_BL_hinge == 0) {
-				BL_hinge_state = 0;
-			}
-		}
-
-		else if (BL_hinge_state == 1) { // down
-			BL_timer_down++;
-
-			if (BL_limit1 == 0 && BL_limit2 == 0) {
-				MDXX_set_range(&BL_motor, 2000, 65535);
-			} else {
-				BL_hinge_state = 2; // stopped by limit
 				MDXX_set_range(&BL_motor, 2000, 0);
+				L_hinge_state = 0;
+				first_time_in = 0;
 
-				if (BL_timer_down < 4800) {
-					BL_timer_up = 0;
-					BL_hinge_state = -1;
-				}
+				send_client_request_safe(CLIENT_REQ_L_READY_FOR_ORDER);
 			}
 		}
 
-		else if (BL_hinge_state == -1) { // up
-			BL_timer_up++;
-
-			if (BL_timer_up > 7000) {
-				BL_hinge_state = 3; // stop after timeout
-				MDXX_set_range(&BL_motor, 2000, 0);
-			} else {
-				MDXX_set_range(&BL_motor, 2000, -65535);
-			}
-		}
-
-		if (BL_hinge_state == 0 || BL_hinge_state == 2 || BL_hinge_state == 3) {
+		if (L_hinge_state == 0) {
+			MDXX_set_range(&FL_motor, 2000, 0);           // stop
 			MDXX_set_range(&BL_motor, 2000, 0);
-			BL_timer_down = 0;
-			BL_timer_up = 0;
-		}
-		///////////////////////////////////////////////
-
-		// flex sensor //
-		flexdata_converted[0] = FlexData[0] / 255.0 * 3.3;
-		flexdata_converted[1] = FlexData[1] / 255.0 * 3.3;
-		if (flexdata_converted[0] >= flex_threshold) {
-			flex_output[0] = 1;
-		}
-		else{
-			flex_output[0] = 0;
+			L_hinge_timer = 0;
+			condition_triggered = 0; // Reset condition trigger when state is 0
 		}
 
-		if (flexdata_converted[1] >= flex_threshold) {
-			flex_output[1] = 1;
-		}
-		else{
-			flex_output[1] = 0;
-		}
-		///////////////////////////////////////////////
+		/////////// flex sensor ////////////////////////
 
+		FL_flex_limit = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5); // not set pin yet
+		BL_flex_limit = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4); // not set pin yet
+		FR_flex_limit = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5); // not set pin yet
+		BR_flex_limit = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4); // not set pin yet
+
+		// Handle flex sensor changes with flags
+		if (FL_flex_limit != FL_flex_limit_prev) {
+			if (FL_flex_limit == 0) {
+				send_client_request_safe(CLIENT_REQ_FL_FLEX_PRESSED);
+			}
+			if (FL_flex_limit == 1) {
+				send_client_request_safe(CLIENT_REQ_FL_FLEX_RELEASED);
+			}
+		}
+
+		if (BL_flex_limit != BL_flex_limit_prev) {
+			if (BL_flex_limit == 0) {
+				send_client_request_safe(CLIENT_REQ_BL_FLEX_PRESSED);
+			}
+			if (BL_flex_limit == 1) {
+				send_client_request_safe(CLIENT_REQ_BL_FLEX_RELEASED);
+			}
+		}
+
+		if (FR_flex_limit != FR_flex_limit_prev) {
+			if (FR_flex_limit == 0) {
+				send_client_request_safe(CLIENT_REQ_FR_FLEX_PRESSED);
+			}
+			if (FR_flex_limit == 1) {
+				send_client_request_safe(CLIENT_REQ_FR_FLEX_RELEASED);
+			}
+		}
+
+		if (BR_flex_limit != BR_flex_limit_prev) {
+			if (BR_flex_limit == 0) {
+				send_client_request_safe(CLIENT_REQ_BR_FLEX_PRESSED);
+			}
+			if (BR_flex_limit == 1) {
+				send_client_request_safe(CLIENT_REQ_BR_FLEX_RELEASED);
+			}
+		}
+
+		// Update previous values
+		FL_flex_limit_prev = FL_flex_limit;
+		BL_flex_limit_prev = BL_flex_limit;
+		FR_flex_limit_prev = FR_flex_limit;
+		BR_flex_limit_prev = BR_flex_limit;
 	}
+
   /* USER CODE END Callback 1 */
 }
 
