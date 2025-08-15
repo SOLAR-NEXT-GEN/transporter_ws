@@ -167,12 +167,29 @@ void send_client_request_safe(uint8_t req_type);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+//void timer_callback(rcl_timer_t *timer, int64_t last_call_time) {
+//	if (timer != NULL) {
+//		// Sync micro-ROS session
+//		rmw_uros_sync_session(timeout_ms);
+//
+//		// Prepare and publish multi-array message with motor data
+//
+//		// Reinitialize watchdog timer
+//		HAL_IWDG_Init(&hiwdg);
+//	}
+//}
+
 void timer_callback(rcl_timer_t *timer, int64_t last_call_time) {
+	static uint8_t cnt = 0;
+
 	if (timer != NULL) {
 		// Sync micro-ROS session
 		rmw_uros_sync_session(timeout_ms);
 
-		// Prepare and publish multi-array message with motor data
+		// Toggle LED every 50 cycles (approximately every 0.5 seconds)
+		if (cnt == 0)
+			HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+		cnt = (cnt + 1) % 50;
 
 		// Reinitialize watchdog timer
 		HAL_IWDG_Init(&hiwdg);

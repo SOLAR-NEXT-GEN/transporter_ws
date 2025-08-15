@@ -38,3 +38,15 @@
 [submodule "firmware/BNO055_uros"]
 	path = firmware/BNO055_uros
 	url = https://github.com/pboon09/BNO055_uros.git
+[submodule "src/rplidar_ros"]
+	path = src/rplidar_ros
+	url = https://github.com/Slamtec/rplidar_ros.git
+	branch = ros2
+[submodule "src/pointcloud_to_laserscan"]
+	path = src/pointcloud_to_laserscan
+	url = https://github.com/ros-perception/pointcloud_to_laserscan.git
+	branch = humble
+[submodule "src/ros2_laser_scan_merger"]
+	path = src/ros2_laser_scan_merger
+	url = https://github.com/mich1342/ros2_laser_scan_merger.git
+	branch = humble
