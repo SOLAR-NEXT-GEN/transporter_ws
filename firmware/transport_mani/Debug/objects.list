@@ -1,5 +1,3 @@
-"./Core/Src/Cytron_MDXX.o"
-"./Core/Src/PWM.o"
 "./Core/Src/app_freertos.o"
 "./Core/Src/config.o"
 "./Core/Src/custom_memory_manager.o"

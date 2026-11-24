@@ -1,0 +1,31 @@
+mobile_controller:
+  ros__parameters:
+    wheel_radius: 0.139        # m
+    wheel_separation: 4.0      # m  (WHEEL_BASE_M from the ODrive test script - verify!)
+    max_linear_velocity: 0.2   # m/s
+    max_angular_velocity: 0.1  # rad/s
+    cmd_timeout: 0.5           # s
+    publish_rate: 50.0
+
+odrive_node:
+  ros__parameters:
+    # One ODrive per wheel (axis0). sign: +1/-1 so positive = robot forward.
+    wheel_names:   ["FL", "RL", "FR", "RR"]
+    wheel_serials: ["003CF6745E24", "003CF67455A2", "003CF6744C10", "003CF6744BA2"]
+    wheel_sides:   ["L", "L", "R", "R"]
+    wheel_signs:   [-1.0, 1.0, 1.0, -1.0]
+
+    gear_ratio: 21.097         # motor turns per wheel turn
+    motor_max_rpm: 300.0
+    speed_fraction: 0.95       # max motor vel = 300/60*0.95 = 4.75 turns/s
+    vel_ramp_rate: 200.0       # turns/s^2 (INPUT_MODE_VEL_RAMP)
+
+    use_watchdog: true
+    watchdog_timeout: 0.5      # s
+    cmd_timeout: 0.5           # s, no wheels/cmd -> zero velocity
+    connect_timeout: 15.0      # s per ODrive search attempt
+    arm_timeout: 3.0
+    index_search_timeout: 15.0
+    startup_action: none       # none | index_search. Robot can only arm after a
+                               # successful index search on ALL 4 ODrives (L1 + PS)
+    control_rate: 100.0

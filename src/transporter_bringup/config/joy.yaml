@@ -1,0 +1,36 @@
+# PS5 (DualSense) mapping for transporter_joy.
+# Defaults match the ROS 2 `joy` package (joy_node, SDL GameController API).
+# Verify on your machine with:  ros2 topic echo /joy
+#
+# If you use joy_linux instead, typical layout is:
+#   cross 0, circle 1, triangle 2, square 3, L1 4, PS 10,
+#   dpad_source: axes, axis_dpad_x 6, axis_dpad_y 7
+joy_node:
+  ros__parameters:
+    device_id: 0
+    deadzone: 0.05
+    autorepeat_rate: 20.0     # REQUIRED > 1/joy_timeout: used as joystick heartbeat
+
+transporter_joy:
+  ros__parameters:
+    publish_rate: 20.0
+    joy_timeout: 0.5          # s, no /joy -> stop + hold
+    linear_speed: 0.2         # m/s  (D-pad up/down)
+    angular_speed: 0.1        # rad/s (D-pad left/right)
+
+    button_deadman: 9         # L1
+    button_index_search: 5    # PS
+    button_left_up: 3         # Triangle
+    button_left_down: 2       # Square
+    button_right_up: 1        # Circle
+    button_right_down: 0      # Cross (X)
+
+    dpad_source: buttons      # buttons | axes
+    button_dpad_up: 11
+    button_dpad_down: 12
+    button_dpad_left: 13
+    button_dpad_right: 14
+    axis_dpad_x: 6            # used when dpad_source = axes (+1 = left)
+    axis_dpad_y: 7            # used when dpad_source = axes (+1 = up)
+
+    index_search_service: /odrive/index_search

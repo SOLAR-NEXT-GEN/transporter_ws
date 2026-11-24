@@ -1,0 +1,4 @@
+manipulator_controller:
+  ros__parameters:
+    publish_rate: 20.0   # manipulator/hw_cmd rate to firmware (firmware holds after 500 ms)
+    cmd_timeout: 0.3     # s, no manipulator/cmd -> hold
